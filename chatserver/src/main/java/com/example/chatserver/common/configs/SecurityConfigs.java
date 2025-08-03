@@ -52,6 +52,7 @@ public class SecurityConfigs {
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);  // 모든 url 패턴에 대해 cors 연결 허용
+
         return source;
     }
 

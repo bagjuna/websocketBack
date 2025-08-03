@@ -51,12 +51,13 @@ public class JwtAuthFilter extends GenericFilter {
                 Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, userDetails.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
+
             chain.doFilter(servletRequest, servletResponse);
         } catch (Exception e) {
             e.printStackTrace();
             httpServletResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
             httpServletResponse.setContentType("application/json");
-            httpServletResponse.getWriter().write("invalid token");
+            httpServletResponse.getWriter().write("{\"error\": \"invalid token\"}");
         }
 
 
