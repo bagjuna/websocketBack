@@ -2,22 +2,25 @@
 import { nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 import Stomp from 'webstomp-client';
 import SockJS from 'sockjs-client/dist/sockjs'
-import axios from 'axios';
+// import axios from 'axios';
 
 
 const messages = ref([])
 const newMessage = ref('')
 const stompClient = ref(null)
-
+const token = ref('')
 const connectWebSocket = () => {
   // stompClient 연결 로직
+  // sockjs는 websocket을 내장한 js 라이브러리. http 엔드포인트 사용
   const sockJs = new SockJS(`${import.meta.env.VITE_APP_API_BASE_URL}/connect`)
   stompClient.value = Stomp.over(sockJs)
-
-  stompClient.value.connect(
+  token.value = localStorage.getItem('token')
+  stompClient.value.connect({
+    Authorization: `Bearer ${token.value}`
+    },
     () =>{
       stompClient.value.subscribe(`/topic/1`, (message) =>{
-        this.messages.push(message.data)
+        messages.value.push(message.body)
         scrollToBottom()
       })
     }
@@ -27,7 +30,7 @@ const connectWebSocket = () => {
 // 메시지 전송
 const sendMessage = () => {
   if (newMessage.value.trim() === '') return
-  stompClient.value.send(`/publish/1`, JSON.stringify({ message: newMessage.value }))
+  stompClient.value.send(`/publish/1`,  newMessage.value )
   newMessage.value = ''
 }
 
