@@ -18,6 +18,7 @@
     "axios": "^1.11.0",
     "element-plus": "^2.10.5",
     "jwt-decode": "^4.0.0",
+    "sockjs-client": "^1.6.1",
     "vue": "^3.5.18",
     "vue-router": "^4.5.1",
     "vuetify": "^3.9.3",
