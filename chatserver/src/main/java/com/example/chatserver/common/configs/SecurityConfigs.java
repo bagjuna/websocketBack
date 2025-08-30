@@ -34,7 +34,7 @@ public class SecurityConfigs {
                 .httpBasic(AbstractHttpConfigurer::disable)  // http Basic 비활성화
                 // 특정 url패턴에 대해서는 Authentication객체 요구하지 않음. (인중처리 제외)
                 .authorizeHttpRequests(a ->
-                        a.requestMatchers("/member/create", "/member/doLogin","/connect").permitAll().anyRequest().authenticated())
+                        a.requestMatchers("/member/create", "/member/doLogin","/connect/**").permitAll().anyRequest().authenticated())
                 .sessionManagement(s-> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))  // 새션 방식을 사용하지 않겠다라는 의미
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
 
@@ -52,6 +52,7 @@ public class SecurityConfigs {
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);  // 모든 url 패턴에 대해 cors 연결 허용
+
         return source;
     }
 

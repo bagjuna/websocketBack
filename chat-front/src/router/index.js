@@ -4,6 +4,7 @@ import MemberCreate from '@/views/MemberCreate.vue'
 import LoginPage from '@/views/LoginPage.vue'
 import MemberList from '@/views/MemberList.vue'
 import SimpleWebSocket from '@/views/SimpleWebSocket.vue'
+import StompChatPage from '@/views/StompChatPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -32,6 +33,11 @@ const router = createRouter({
       path: '/simple/chat',
       name: 'SimpleWebSocket',
       component : SimpleWebSocket
+    },
+    {
+      path: '/chatPage',
+      name: 'StompChatPage',
+      component: StompChatPage
     }
   ],
 })

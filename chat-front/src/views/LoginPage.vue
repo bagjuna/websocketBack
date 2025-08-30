@@ -5,13 +5,8 @@
         <v-card>
           <v-card-title class="text-h5 text-center">로그인</v-card-title>
           <v-card-text>
-            <v-form @submit.prevent="memberCreate">
-              <v-text-field
-                label="이메일"
-                v-model="email"
-                type="email"
-                required
-              ></v-text-field>
+            <v-form @submit.prevent="doLogin">
+              <v-text-field label="이메일" v-model="email" type="email" required></v-text-field>
               <v-text-field
                 label="비밀번호"
                 v-model="password"
@@ -40,16 +35,16 @@ const router = useRouter()
 const email = ref('')
 const password = ref('')
 
-const memberCreate = async () => {
+const doLogin = async () => {
   try {
     const data = {
-      email: email.value,      // .value 추가
-      password: password.value  // .value 추가
+      email: email.value, // .value 추가
+      password: password.value, // .value 추가
     }
 
     const response = await axios.post('/api/member/doLogin', data)
     const token = response.data.token
-    const decoded = jwtDecode(token)  // 한 번만 디코드
+    const decoded = jwtDecode(token) // 한 번만 디코드
 
     localStorage.setItem('token', token)
     localStorage.setItem('role', decoded.role)

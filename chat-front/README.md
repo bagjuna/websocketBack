@@ -31,6 +31,7 @@ npm i webstomp-client
 ```sh
 npm i sockjs-client
 ```
+
 ```sh
 npm install vuetify@3
 ```

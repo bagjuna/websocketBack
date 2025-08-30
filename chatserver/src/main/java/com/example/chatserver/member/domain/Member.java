@@ -1,5 +1,7 @@
 package com.example.chatserver.member.domain;
 
+import com.example.chatserver.common.domain.BaseTimeEntity;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -9,7 +11,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Member {
+public class Member extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +26,6 @@ public class Member {
     @Enumerated(EnumType.STRING)
     @Builder.Default
     private Role role = Role.USER; // 기본값 직접 할당
-
 
 
 }
