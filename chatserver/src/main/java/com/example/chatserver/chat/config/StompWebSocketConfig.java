@@ -39,10 +39,14 @@ public class StompWebSocketConfig implements WebSocketMessageBrokerConfigurer {
 	}
 
 
-	// 웹 소켓 요청(connect, subscribe, publish)등의 요청시에는 http header등 http메시지를 넣어올 수 있고, 이를 Insertor를 통해 가로채서 토큰등을 검증 할 수 있음.
+	// 웹 소켓 요청(connect, subscribe, publish)등의 요청시에는 http header등 http 메시지를 넣어올 수 있고,
+	// 이를 interceptor를 통해 가로채서 토큰등을 검증 할 수 있음.
 	@Override
 	public void configureClientInboundChannel(ChannelRegistration registration) {
 		registration.interceptors(stompHandler);
 	}
+
+
+
 
 }
