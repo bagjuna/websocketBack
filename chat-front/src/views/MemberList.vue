@@ -50,6 +50,7 @@ const memberList = ref([])
 
 // lifecycle - created 대신 onMounted 사용
 onMounted(async () => {
+
   const response = await axios.get('/api/member/list')
   console.log(response.data)
   memberList.value = response.data

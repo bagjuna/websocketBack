@@ -9,6 +9,8 @@ import com.example.chatserver.member.domain.Member;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -43,8 +45,29 @@ public class ChatMessage extends BaseTimeEntity {
 	@Column(nullable = false, length = 500)
 	private String content;
 
+	// @Enumerated(EnumType.STRING)
+	// private MessageType type;
+
 	@OneToMany(mappedBy = "chatMessage", cascade = CascadeType.REMOVE, orphanRemoval = true)
 	private List<ReadStatus> readStatus = new ArrayList<>();
 
 
+
+	public static ChatMessage createChatMessage(Member member, ChatRoom chatRoom, String content) {
+		return ChatMessage.builder()
+			.content(content)
+			// .type(MessageType.CHAT)
+			.member(member)
+			.chatRoom(chatRoom)
+			.build();
+	}
+
+	public static ChatMessage createSystemMessage(Member member, ChatRoom chatRoom, String content) {
+		return ChatMessage.builder()
+			.content(content)
+			// .type(MessageType.SYSTEM)
+			.member(member)
+			.chatRoom(chatRoom)
+			.build();
+	}
 }

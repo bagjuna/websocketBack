@@ -6,7 +6,10 @@
           <v-card-title class="text-h5 text-center">로그인</v-card-title>
           <v-card-text>
             <v-form @submit.prevent="doLogin">
-              <v-text-field label="이메일" v-model="email" type="email" required></v-text-field>
+              <v-text-field label="이메일"
+                            v-model="email"
+                            type="email"
+                            required></v-text-field>
               <v-text-field
                 label="비밀번호"
                 v-model="password"
@@ -44,15 +47,16 @@ const doLogin = async () => {
 
     const response = await axios.post('/api/member/doLogin', data)
     const token = response.data.token
-    const decoded = jwtDecode(token) // 한 번만 디코드
+    const role = jwtDecode(token).role //
+    const sub = jwtDecode(token).sub //
 
     localStorage.setItem('token', token)
-    localStorage.setItem('role', decoded.role)
-    localStorage.setItem('email', decoded.sub)
+    localStorage.setItem('role', role)
+    localStorage.setItem('email', sub)
 
     // Vue Router 사용 권장
-    router.push('/')
-    // 또는 window.location.href = '/'
+    // router.push('/')
+    window.location.href = '/'
 
     console.log(response.data)
   } catch (error) {
@@ -60,4 +64,6 @@ const doLogin = async () => {
     // 에러 처리 로직 추가
   }
 }
+
+
 </script>
