@@ -21,6 +21,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 @Builder
+// 읽음 상태를 나타내는 엔티티
 public class ReadStatus extends BaseTimeEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,7 +40,9 @@ public class ReadStatus extends BaseTimeEntity {
 	private ChatMessage chatMessage;
 
 	@Column(nullable = false)
-	private Boolean isRead;
+	private Boolean isRead; // 읽음 상태 (true: 읽음, false: 안읽음)
 
-
+	public void updateReadStatus(Boolean isRead) {
+		this.isRead = isRead;
+	}
 }

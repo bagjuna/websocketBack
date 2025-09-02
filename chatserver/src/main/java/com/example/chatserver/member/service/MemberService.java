@@ -10,7 +10,6 @@ import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.xml.stream.events.Comment;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,7 +57,7 @@ public class MemberService {
         List<MemberListResDto> memberListResDtos = new ArrayList<>();
         for (Member m : members) {
             MemberListResDto memberListResDto = new MemberListResDto();
-            memberListResDto.setId(m.getId());
+            memberListResDto.setId(m.getMemberId());
             memberListResDto.setEmail(memberListResDto.getEmail());
             memberListResDto.setName(m.getName());
             memberListResDtos.add(memberListResDto);

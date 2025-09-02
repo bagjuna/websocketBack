@@ -12,4 +12,5 @@ import com.example.chatserver.chat.domain.ChatRoom;
 public interface ChatMessageRepository extends JpaRepository<ChatMessage, Long> {
 
     List<ChatMessage> findByChatRoomOrderByCreatedTimeAsc(ChatRoom chatRoom);
+
 }

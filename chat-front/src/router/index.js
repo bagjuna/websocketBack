@@ -5,6 +5,8 @@ import LoginPage from '@/views/LoginPage.vue'
 import MemberList from '@/views/MemberList.vue'
 import SimpleWebSocket from '@/views/SimpleWebSocket.vue'
 import StompChatPage from '@/views/StompChatPage.vue'
+import GroupChattingList from '@/views/GroupChattingList.vue'
+import MyChatPage from '@/views/MyChatPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -35,10 +37,21 @@ const router = createRouter({
       component : SimpleWebSocket
     },
     {
-      path: '/chatPage',
+      path: '/chatPage/:roomId',
       name: 'StompChatPage',
-      component: StompChatPage
-    }
+      component: StompChatPage,
+      props: true
+    },
+    {
+      path: '/groupchatting/list',
+      name: 'GroupChattingList',
+      component: GroupChattingList
+    },
+    {
+      path: '/my/chat/page',
+      name: 'MyChatPage',
+      component: MyChatPage
+    },
   ],
 })
 

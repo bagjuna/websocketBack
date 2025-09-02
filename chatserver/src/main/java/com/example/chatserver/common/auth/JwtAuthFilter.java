@@ -35,7 +35,7 @@ public class JwtAuthFilter extends GenericFilter {
         try {
             if (token != null) {
                 if (!token.substring(0, 7).equals("Bearer ")) {
-                    throw new AuthenticationServiceException("Bearer 형식이 아닙니다.");
+                    throw  new AuthenticationServiceException("Bearer 형식이 아닙니다.");
                 }
                 String jwtToken = token.substring(7);
                 // 토큰 검증 및 claims 추출
@@ -48,7 +48,7 @@ public class JwtAuthFilter extends GenericFilter {
                 List<GrantedAuthority> authorities = new ArrayList<>();
                 authorities.add(new SimpleGrantedAuthority("ROLE_" + claims.get("role")));
                 UserDetails userDetails = new User(claims.getSubject(), "", authorities);
-                Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, userDetails.getAuthorities());
+                Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, "",userDetails.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
 

@@ -29,7 +29,7 @@ public class MemberController {
     @PostMapping("/create")
     public ResponseEntity<?> memberCreate(@RequestBody MemberSaveReqDto memberSaveReqDto) {
         Member member = memberService.create(memberSaveReqDto);
-        return new ResponseEntity<>(member.getId(), HttpStatus.CREATED);
+        return new ResponseEntity<>(member.getMemberId(), HttpStatus.CREATED);
     }
 
     @PostMapping("/doLogin")
@@ -39,7 +39,7 @@ public class MemberController {
         // 일치할 경우 access토큰 발행
         String jwtToken = jwtTokenProvider.creatToken(member.getEmail(), member.getRole().toString());
         Map<String, Object> loginInfo = new HashMap<>();
-        loginInfo.put("id", member.getId());
+        loginInfo.put("id", member.getMemberId());
         loginInfo.put("token", jwtToken);
         return new ResponseEntity<>(loginInfo, HttpStatus.OK);
     }

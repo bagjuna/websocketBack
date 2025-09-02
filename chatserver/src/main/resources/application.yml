@@ -1,7 +1,12 @@
+server:
+  port: 8081
 spring:
+  redis:
+    host: localhost
+    port: 6379
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3307/chatdb?useSSL=false
+    url: jdbc:mysql://localhost:3307/chatdb
     username: root
     password: 1234
   jpa:
@@ -9,10 +14,11 @@ spring:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     generate-ddl: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     show_sql: true
 
 jwt:
   # junachatjunachatjunachatjunachatjunachatjunachatjunachatjunachatjunachat
-  secretKey: anVuYWNoYXRqdW5hY2hhdGp1bmFjaGF0anVuYWNoYXRqdW5hY2hhdGp1bmFjaGF0anVuYWNoYXRqdW5hY2hhdGp1bmFjaGF0
-  expiration: 3000
+#  secretKey: anVuYWNoYXRqdW5hY2hhdGp1bmFjaGF0anVuYWNoYXRqdW5hY2hhdGp1bmFjaGF0anVuYWNoYXRqdW5hY2hhdGp1bmFjaGF0
+  secretKey: Y2hhdHNlcnZlcnNlY3JldGFjY2Vzc3Rva2VuY2hhdHNlcnZlcnNlY3JldGFjY2Vzc3Rva2VuY2hhdHNlcnZlcnNlY3JldGFjY2Vzc3Rva2Vu
+  expiration: 86400

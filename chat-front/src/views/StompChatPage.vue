@@ -3,14 +3,24 @@ import { nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 import Stomp from 'webstomp-client';
 import SockJS from 'sockjs-client/dist/sockjs'
 import { onBeforeRouteLeave } from 'vue-router'
-// import axios from 'axios';
+import axios from 'axios'
 
+const props = defineProps({
+  roomId: {
+    type: String,
+    required: true,
+  },
+});
 
 const messages = ref([])
 const newMessage = ref('')
 const stompClient = ref(null)
 const token = ref('')
 const senderEmail = ref('')
+const roomId = ref(props.roomId)
+
+
+
 const connectWebSocket = () => {
   if(stompClient.value && stompClient.value.connected) {
     return
@@ -24,11 +34,11 @@ const connectWebSocket = () => {
     Authorization: `Bearer ${token.value}`
     },
     () =>{
-      stompClient.value.subscribe(`/topic/1`, (message) =>{
+      stompClient.value.subscribe(`/topic/${roomId.value}`, (message) =>{
         const parseMessage = JSON.parse(message.body)
         messages.value.push(parseMessage)
         scrollToBottom()
-      })
+      },{Authorization: `Bearer ${token.value}`} )
     }
   )
 }
@@ -40,7 +50,7 @@ const sendMessage = () => {
     senderEmail: senderEmail.value,
     message: newMessage.value
   }
-  stompClient.value.send(`/publish/1`,  JSON.stringify(message) )
+  stompClient.value.send(`/publish/${roomId.value}`,  JSON.stringify(message) )
   newMessage.value = ''
 }
 
@@ -55,16 +65,20 @@ const scrollToBottom = () => {
 }
 
 // WebSocket 연결 해제
-const disconnectWebSocket = () => {
+const disconnectWebSocket = async () => {
+  // 채팅방 나갈때 읽음 처리
+  await axios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/chat/room/${roomId.value}/read`)
   if(stompClient.value && stompClient.value.connected) {
-    stompClient.value.unsubscribe(`/topic/1`);
+    stompClient.value.unsubscribe(`/topic/${roomId.value}`);
     stompClient.value.disconnect();
   }
 }
 
 // lifecycle hooks
-onMounted(() => {
-  senderEmail.value = localStorage.getItem('email')
+onMounted(async() => {
+  senderEmail.value = localStorage.getItem('email').trim()
+  const response = await axios.get(`${import.meta.env.VITE_APP_API_BASE_URL}/chat/history/${roomId.value}`)
+  messages.value = response.data
   connectWebSocket()
 })
 
@@ -90,13 +104,14 @@ onBeforeRouteLeave((to, from, next) => {
           <v-card-text>
             <div class="chat-box">
               <div v-for="(message, index) in messages" :key="index" class="message"
-              :class="[ 'chat-message', message.senderEmail.value === senderEmail.value ? 'sent' : 'received']"
-                >
-                <strong>{{message.senderEmail.value}}</strong> {{ message.message.value }}
+                   :class="['chat-message', message.senderEmail === senderEmail ? 'sent' : 'received']"
+
+              >
+                <strong>{{message.senderEmail}}</strong> {{ message.message }}
               </div>
             </div>
-            <v-text-field v-model="newMessage" label="메시지 입력" @keyup.enter="sendMessage" />
-            <v-btn @click="sendMessage" color="primary" block>전송</v-btn>
+            <v-text-field v-model="newMessage" label="메시지 입력" @keyup.enter="sendMessage()" />
+            <v-btn @click="sendMessage()" color="primary" block>전송</v-btn>
           </v-card-text>
         </v-card>
       </v-col>
