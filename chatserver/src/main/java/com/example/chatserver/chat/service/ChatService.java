@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,7 +13,7 @@ import com.example.chatserver.chat.domain.ChatMessage;
 import com.example.chatserver.chat.domain.ChatParticipant;
 import com.example.chatserver.chat.domain.ChatRoom;
 import com.example.chatserver.chat.domain.ReadStatus;
-import com.example.chatserver.chat.dto.ChatMessageRequest;
+import com.example.chatserver.chat.dto.ChatMessageDto;
 import com.example.chatserver.chat.dto.ChatMessageResponse;
 import com.example.chatserver.chat.dto.ChatRoomListResponse;
 import com.example.chatserver.chat.dto.MyChatListResponse;
@@ -49,20 +50,20 @@ public class ChatService {
 		this.memberRepository = memberRepository;
 	}
 
-	public void saveMessage(Long roomId, ChatMessageRequest chatMessageRequest) {
+	public void saveMessage(Long roomId, ChatMessageDto chatMessageDtoRequest) {
 		// 1. 채팅방 조회
 		ChatRoom chatRoom = chatRoomRepository.findById(roomId).orElseThrow(
 			() -> new EntityNotFoundException("room cannot found. id: ")
 		);
 		// 2. 보낸 사람 조회
-		Member sender = memberRepository.findByEmail(chatMessageRequest.getSenderEmail()).orElseThrow(
+		Member sender = memberRepository.findByEmail(chatMessageDtoRequest.getSenderEmail()).orElseThrow(
 			() -> new EntityNotFoundException("sender cannot found. email: ")
 		);
 		// 3. 채팅 메시지 저장
 		ChatMessage chatMessage = ChatMessage.builder()
 			.chatRoom(chatRoom)
 			.member(sender)
-			.content(chatMessageRequest.getMessage())
+			.content(chatMessageDtoRequest.getMessage())
 			.build();
 		chatMessageRepository.save(chatMessage);
 		// 4. 사용자 별로 읽음 여부 저장
@@ -150,6 +151,8 @@ public class ChatService {
 			() -> new EntityNotFoundException("room cannot found. id: " + roomId)
 		);
 
+	  SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
 		// 2. 현재 로그인한 사용자 조회
 		Member member = memberRepository
 			.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName())
@@ -181,6 +184,11 @@ public class ChatService {
 		chatParticipantRepository.save(chatParticipant);
 	}
 
+	/**
+	 * 채팅방의 채팅내역 조회
+	 * @param roomId
+	 * @return
+	 */
 	public List<ChatMessageResponse> getChatHistory(Long roomId) {
 		// 1. 해당 채팅방의 참여자가 아닐경우 예외처리
 		// 1-1. 채팅방 조회
@@ -215,6 +223,12 @@ public class ChatService {
 
 	}
 
+	/**
+	 * 특정 채팅방에 사용자가 참여자인지 체크
+	 * @param email
+	 * @param roomId
+	 * @return
+	 */
 	public boolean isRoomParticipant(String email, Long roomId) {
 		// 해당 roomId에 email을 가진 사용자가 참여자인지 체크
 

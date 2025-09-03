@@ -7,7 +7,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 
-import com.example.chatserver.chat.dto.ChatMessageRequest;
+import com.example.chatserver.chat.dto.ChatMessageDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -39,8 +39,8 @@ public class RedisPubSubService implements MessageListener {
 		String payload = new String(message.getBody());
 		ObjectMapper objectMapper = new ObjectMapper();
 		try {
-			ChatMessageRequest chatMessageRequest = objectMapper.readValue(payload, ChatMessageRequest.class);
-			messageTemplate.convertAndSend("/topic/" + chatMessageRequest.getRoomId(), chatMessageRequest);
+			ChatMessageDto chatMessageDto = objectMapper.readValue(payload, ChatMessageDto.class);
+			messageTemplate.convertAndSend("/topic/" + chatMessageDto.getRoomId(), chatMessageDto);
 		} catch (JsonProcessingException e) {
 			throw new RuntimeException(e);
 		}
