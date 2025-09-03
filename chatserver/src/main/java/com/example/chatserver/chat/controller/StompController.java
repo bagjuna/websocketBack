@@ -1,11 +1,12 @@
 package com.example.chatserver.chat.controller;
 
+
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
 
-import com.example.chatserver.chat.dto.ChatMessageRequest;
+import com.example.chatserver.chat.dto.ChatMessageDto;
 import com.example.chatserver.chat.service.ChatService;
 import com.example.chatserver.chat.service.RedisPubSubService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -34,14 +35,15 @@ public class StompController {
 
     // 방법2. MessageMapping 어노테이션만 활용.
     @MessageMapping("/{roomId}")
-    public void sendMessage(@DestinationVariable Long roomId, ChatMessageRequest chatMessageRequest) throws
+    public void sendMessage(@DestinationVariable Long roomId, ChatMessageDto chatMessageDto) throws
 		JsonProcessingException {
-        System.out.println(chatMessageRequest.getMessage());
-        chatService.saveMessage(roomId, chatMessageRequest);
-        chatMessageRequest.setRoomId(roomId);
+        System.out.println(chatMessageDto.getMessage());
+        chatService.saveMessage(roomId, chatMessageDto);
+        chatMessageDto.setRoomId(roomId);
+		// chatMessageDto.setCreatedTime(LocalDateTime.now());
         // messageTemplate.convertAndSend("/topic/" + roomId, chatMessageRequest);
         ObjectMapper objectMapper = new ObjectMapper();
-        String message = objectMapper.writeValueAsString(chatMessageRequest);
+        String message = objectMapper.writeValueAsString(chatMessageDto);
         redisPubSubService.publish("chat", message);
 
     }

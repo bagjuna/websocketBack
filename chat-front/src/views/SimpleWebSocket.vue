@@ -7,7 +7,7 @@ const newMessage = ref('')
 
 const connectWebSocket = () => {
   // WebSocket 연결 로직
-  ws.value = new WebSocket('ws://localhost:8080/connect')
+  ws.value = new WebSocket('ws://localhost:8081/connect')
 
   ws.value.onopen = () => {
     console.log('successfully connected to')

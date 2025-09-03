@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ChatMessageResponse {
+	private Long roomId;
 	private String message;
 	private String senderEmail;
 	private MessageType type;
