@@ -84,11 +84,12 @@ onMounted(async() => {
 
 
 // 화면을 완전히 꺼버렸을 때
+// 컴포넌트가 파괴되기 전에 호출되는 함수
 onBeforeUnmount(() => {
   disconnectWebSocket()
 })
 
-// 사용자가 현재 라우트로 이동하려고 할때 호출되는 함수
+// 사용자가 현재 페이지에서 다른 페이지로 이동하려고 할 때 호출되는 함수
 onBeforeRouteLeave((to, from, next) => {
   disconnectWebSocket()
   next();
