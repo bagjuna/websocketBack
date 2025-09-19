@@ -59,8 +59,6 @@ public class StompHandler implements ChannelInterceptor {
 				throw new AuthenticationServiceException("해당 room에 권한이 없습니다.");
 			}
 		}
-
-
 		return message;
 	}
 

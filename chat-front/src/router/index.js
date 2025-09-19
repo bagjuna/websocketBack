@@ -7,6 +7,7 @@ import SimpleWebSocket from '@/views/SimpleWebSocket.vue'
 import StompChatPage from '@/views/StompChatPage.vue'
 import GroupChattingList from '@/views/GroupChattingList.vue'
 import MyChatPage from '@/views/MyChatPage.vue'
+import TailwindChat from '@/views/TailwindChat.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -19,41 +20,46 @@ const router = createRouter({
     {
       path: '/member/create',
       name: 'MemberCreate',
-      component: MemberCreate
+      component: MemberCreate,
     },
     {
       path: '/login',
       name: 'LoginPage',
-      component: LoginPage
+      component: LoginPage,
     },
     {
       path: '/member/list',
       name: 'MemberList',
-      component: MemberList
+      component: MemberList,
     },
     {
       path: '/simple/chat',
       name: 'SimpleWebSocket',
-      component : SimpleWebSocket
+      component: SimpleWebSocket,
     },
     {
       path: '/chatPage/:roomId',
       name: 'StompChatPage',
       component: StompChatPage,
-      props: true
+      props: true,
     },
     {
       path: '/groupchatting/list',
       name: 'GroupChattingList',
-      component: GroupChattingList
+      component: GroupChattingList,
     },
     {
       path: '/my/chat/page',
       name: 'MyChatPage',
-      component: MyChatPage
+      component: MyChatPage,
+    },
+    {
+      path: '/tailwind/chatPage/roomId',
+      name: 'HackTestChat',
+      component: TailwindChat,
+      props: true,
     },
   ],
 })
-
 
 export default router
